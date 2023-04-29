@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  zafferano-db:
+    build: ./zafferano-db
+    image: drcoccodrillus/zafferano-news-db:latest
+    container_name: zafferano-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - zafferano-data:/var/lib/postgresql/data
+    networks:
+      zafferano-network:
+        ipv4_address: 172.16.0.2
+  zafferano-scraper:
+    build: ./zafferano-archiver
+    image: drcoccodrillus/zafferano-news-archiver:latest
+    container_name: zafferano-archiver
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      zafferano-network:
+        ipv4_address: 172.16.0.3
+
+volumes:
+  zafferano-data:
+
+networks:
+  zafferano-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/24
+          gateway: 172.16.0.1
