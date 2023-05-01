@@ -18,4 +18,4 @@ Using this scraper is very simple. You just need to follow the steps below and y
 
 ### Run the scraper
 
-`docker exec -it zafferano-archiver pull`
+`docker exec -it zafferano-archiver zpull`
