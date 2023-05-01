@@ -55,8 +55,12 @@ cur.close()
 cur = conn.cursor()
 #---Il Cameo - Content
 #Get for each article the description and the content
+print('Retrieving articles content...')
 for page_url in page_urls:
     response = session.get(f'https://zafferano.news{page_url}')
+    print('Working on --> ' + str(response.url))
+    print('Response: ' + str(response.status_code))
+
     soup = BeautifulSoup(response.content, 'html.parser')
     description = soup.find('div', class_='post-desccription').text.strip()
     content = soup.find('div', class_='post-content').text.strip()
